@@ -1,0 +1,61 @@
+{
+  "agent_id": "dotnet-security-validator",
+  "version": "1.0.0-prototype",
+  "technology": "dotnet",
+  "description": "Valida código .NET contra la Guía Técnica de Seguridad Back .NET de Sistecredito",
+  "author": "Sistecredito - Ingeniería de Software",
+  "created": "2026-02-02",
+  
+  "knowledge_base": {
+    "source": "SisteDocs",
+    "primary_docs": [
+      "ingenieria-de-software/calidad-en-la-codificacion/desarrollo-seguro/guia-segurirdad-back/guia-buenas-practicas-seguridad-back.html"
+    ],
+    "related_docs": [
+      "ingenieria-de-software/calidad-en-la-codificacion/desarrollo-seguro/autenticacion-y-autorizacion/práctica-back-to-back.html",
+      "ingenieria-de-software/politicas-y-lineamientos/aseguramiento-token-b2c.html"
+    ]
+  },
+  
+  "validation_rules": {
+    "csrf_protection": {
+      "severity": "CRITICAL",
+      "enabled": true,
+      "description": "Valida protección contra CSRF usando Azure AD B2C o mTLS"
+    },
+    "error_handling": {
+      "severity": "HIGH",
+      "enabled": true,
+      "description": "Valida manejo seguro de excepciones sin revelar información sensible"
+    },
+    "input_validation": {
+      "severity": "CRITICAL",
+      "enabled": true,
+      "description": "Valida que se use validación de datos de entrada (FluentValidation)"
+    },
+    "exception_filters": {
+      "severity": "HIGH",
+      "enabled": true,
+      "description": "Valida uso de ExceptionFilter centralizado en vez de try-catch"
+    },
+    "logging_security": {
+      "severity": "MEDIUM",
+      "enabled": true,
+      "description": "Valida que los logs no contengan información sensible"
+    },
+    "http_status_codes": {
+      "severity": "LOW",
+      "enabled": true,
+      "description": "Valida uso correcto de códigos HTTP"
+    },
+    "sql_injection": {
+      "severity": "CRITICAL",
+      "enabled": true,
+      "description": "Valida uso de ORM (Entity Framework) para prevenir SQL Injection"
+    }
+  },
+  
+  "enforcement_level": "blocking",
+  "block_on_critical": true,
+  "warn_on_high": true
+}
