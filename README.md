@@ -6,6 +6,18 @@
 **Alcance**: Todos los desarrolladores de la compañía  
 **Objetivo**: Automatizar completamente el SDLC usando agentes personalizados de GitHub Copilot CLI
 
+## Stack Tecnológico de Sistecredito
+- **Frontend Web**: Angular
+- **Frontend Mobile**: iOS (Swift/Objective-C) y Android (Kotlin/Java) nativos
+- **Backend**: .NET (C#)
+- **Orquestación y Despliegue**: AKS (Azure Kubernetes Service)
+- **Comunicación Sincrónica**: gRPC
+- **Comunicación Asincrónica**: Azure Service Bus
+- **Exposición Externa**: BFF en NestJS + Azure API Management
+- **Nube Principal**: Azure (GCP y AWS permitidos bajo aprobación)
+- **Base de Datos**: SQL Server, MongoDB (según caso de uso)
+- **Repositorios**: Git + Azure DevOps / GitHub
+
 ## Problema
 Sistecredito necesita un sistema centralizado para:
 - Desarrollar agentes personalizados que automaticen cada fase del SDLC
@@ -13,6 +25,8 @@ Sistecredito necesita un sistema centralizado para:
 - Sincronizar actualizaciones automáticamente desde un repositorio central
 - Mantener gobernanza y control de versiones de los agentes
 - Asegurar consistencia en prácticas de desarrollo
+
+**VENTAJA CRÍTICA**: Sistecredito YA TIENE documentación de prácticas tecnológicas en **SisteDocs** (https://docs.sistecreditocloud.com/), lo que acelera significativamente la implementación del knowledge base.
 
 ## Diagramas de Arquitectura
 
@@ -366,85 +380,190 @@ Sistema centralizado usando **MCP (Model Context Protocol)** con los siguientes 
 
 ### Componentes del Sistema
 
-#### 1. Knowledge Base de Prácticas Tecnológicas
-Repositorio separado o módulo dentro del repositorio de agentes que contiene:
-- **Estándares de código** por lenguaje/framework
-- **Arquitecturas aprobadas** (microservicios, event-driven, etc.)
-- **Patrones de diseño** obligatorios y prohibidos
-- **Políticas de seguridad** (OWASP, encriptación, autenticación)
-- **Convenciones de naming** (variables, clases, APIs, bases de datos)
-- **Templates aprobados** (proyectos, configuraciones, pipelines)
-- **Catálogo de librerías** permitidas/prohibidas
-- **Políticas de testing** (cobertura mínima, tipos de tests)
-- **Estándares de documentación**
+#### 1. Knowledge Base de Prácticas Tecnológicas (BASADO EN SISTEDOCS EXISTENTE)
+
+**Fuente**: https://docs.sistecreditocloud.com/
+
+**Documentación Ya Disponible en SisteDocs:**
+
+##### A. Desarrollo de Software (/ingenieria-de-software/)
+- ✅ **Plantillas de Desarrollo** (Clean Architecture, DDD, Feature-based)
+  - Clean Architecture: .NET Backend, NestJS BFF, Angular Frontend
+  - DDD Architecture: .NET Backend para migraciones
+  - Feature-based Architecture: Angular
+  - Minimal APIs: .NET
+  - Azure Functions: .NET
+- ✅ **Calidad en la Codificación**
+  - Análisis estático: SonarCloud, SAST
+  - Desarrollo seguro: Guía Back .NET, Guía Web
+  - Autenticación: Azure AD B2C, Back to Back
+  - Observabilidad
+- ✅ **Políticas y Lineamientos**
+  - Automatización Pruebas Unitarias backend .NET
+  - Mutación de Pruebas Unitarias .NET
+  - Aseguramiento Token JWT B2C
+  - GitHub Copilot (¡ya tienen prácticas!)
+  - Gobierno Entidades Datalake
+- ✅ **Sistema de Diseño Angular**
+  - Componentes atómicos: Badge, Button, Checkbox, etc.
+  - Versionamiento del sistema de diseño
+- ✅ **Infraestructura**
+  - Despliegue mobile
+  
+##### B. DevOps (/ingenieria-devops/)
+- Pendiente explorar (error 500 en navegación)
+- Probablemente: AKS, pipelines, Azure DevOps
+
+##### C. Analítica y Ciencia de Datos
+- MLOps
+- Modelos analíticos
+
+**Documentación Faltante (Identificada):**
+- ❌ Estándares específicos de C# .NET (naming, arquitectura detallada)
+- ❌ Estándares de TypeScript/Angular detallados
+- ❌ Librerías aprobadas/prohibidas (NuGet, npm, CocoaPods, Gradle)
+- ❌ Estándares de iOS/Android nativos
+- ❌ Estándares de gRPC detallados
+- ❌ Políticas de seguridad OWASP específicas
+- ❌ Configuraciones de Azure (AKS, Service Bus, Key Vault)
+- ❌ Estándares de bases de datos (SQL Server, PostgreSQL, CosmosDB)
+- ❌ Plantillas de pipelines Azure DevOps/GitHub Actions
+
+**Acción**: En Fase 0-1, se extraerá lo que existe y se identificará lo que falta para completar.
 
 #### 2. Estructura del Repositorio Central (sistecredito/copilot-agents)
 ```
 sistecredito-copilot-agents/
 ├── knowledge-base/                          # Base de conocimiento de Sistecredito
+│   ├── sistedocs-sync/                      # ⭐ NUEVO: Scripts de sincronización con SisteDocs
+│   │   ├── sync-script.js                   # Script para extraer de SisteDocs
+│   │   ├── sistedocs-urls.json              # URLs de documentos a sincronizar
+│   │   └── last-sync.json                   # Timestamp de última sincronización
 │   ├── standards/
-│   │   ├── java-standards.md
-│   │   ├── python-standards.md
-│   │   ├── javascript-standards.md
-│   │   ├── sql-standards.md
-│   │   └── api-design-standards.md
+│   │   ├── csharp-dotnet-standards.md       # .NET C# standards (EXTRAÍDO de SisteDocs)
+│   │   ├── angular-standards.md             # Angular + TypeScript (EXTRAÍDO)
+│   │   ├── nestjs-standards.md              # NestJS para BFF (EXTRAÍDO)
+│   │   ├── ios-standards.md                 # Swift/Objective-C (A CREAR - no existe)
+│   │   ├── android-standards.md             # Kotlin/Java Android (A CREAR - no existe)
+│   │   ├── typescript-standards.md          # TypeScript general
+│   │   ├── grpc-standards.md                # gRPC patterns (A CREAR - referencias en plantillas)
+│   │   └── sql-standards.md                 # SQL Server + PostgreSQL (A CREAR)
 │   ├── architecture/
-│   │   ├── microservices-guidelines.md
-│   │   ├── event-driven-patterns.md
-│   │   ├── database-patterns.md
-│   │   └── approved-architectures.json
+│   │   ├── clean-architecture.md            # ⭐ EXISTE en SisteDocs (extraer)
+│   │   ├── ddd-architecture.md              # ⭐ EXISTE en SisteDocs
+│   │   ├── feature-based-architecture.md    # ⭐ EXISTE en SisteDocs
+│   │   ├── microservices-dotnet-guidelines.md # A CREAR basado en plantillas
+│   │   ├── bff-pattern.md                   # ⭐ Parcialmente en SisteDocs (NestJS BFF)
+│   │   ├── grpc-communication-patterns.md   # A CREAR
+│   │   ├── service-bus-patterns.md          # Referenciado en SisteDocs
+│   │   └── approved-architectures.json      # Compilar de SisteDocs
+│   ├── azure/
+│   │   ├── azure-functions-best-practices.md # ⭐ EXISTE en SisteDocs
+│   │   ├── aks-best-practices.md            # En DevOps (pendiente extraer)
+│   │   ├── api-management-policies.md       # A CREAR
+│   │   ├── service-bus-configuration.md     # Referenciado en integraciones
+│   │   ├── azure-devops-pipelines.md        # En DevOps (pendiente extraer)
+│   │   ├── azure-ad-b2c.md                  # ⭐ EXISTE en SisteDocs (autenticación)
+│   │   └── multi-cloud-guidelines.md        # A CREAR (GCP + AWS aprobación)
 │   ├── security/
-│   │   ├── owasp-compliance.md
-│   │   ├── authentication-patterns.md
-│   │   ├── encryption-standards.md
-│   │   └── vulnerability-checklist.json
+│   │   ├── owasp-compliance.md              # A CREAR basado en guías existentes
+│   │   ├── guia-seguridad-backend-dotnet.md # ⭐ EXISTE en SisteDocs
+│   │   ├── guia-seguridad-web.md            # ⭐ EXISTE en SisteDocs
+│   │   ├── azure-security-standards.md      # Parcialmente en B2C docs
+│   │   ├── mobile-security-ios.md           # A CREAR
+│   │   ├── mobile-security-android.md       # A CREAR
+│   │   ├── observabilidad.md                # ⭐ EXISTE en SisteDocs
+│   │   └── back-to-back-authentication.md   # ⭐ EXISTE en SisteDocs
 │   ├── libraries/
-│   │   ├── approved-libraries.json        # Librerías permitidas
-│   │   ├── deprecated-libraries.json      # Librerías prohibidas
-│   │   └── library-alternatives.md
+│   │   ├── approved-nuget-packages.json     # A CREAR (extraer de plantillas)
+│   │   ├── approved-npm-packages.json       # A CREAR (extraer de plantillas Angular/NestJS)
+│   │   ├── approved-cocoapods.json          # A CREAR
+│   │   ├── approved-gradle-dependencies.json # A CREAR
+│   │   ├── deprecated-libraries.json        # A CREAR
+│   │   └── library-alternatives.md          # A CREAR
 │   ├── testing/
-│   │   ├── unit-test-requirements.md
-│   │   ├── integration-test-guidelines.md
-│   │   ├── coverage-requirements.json     # 80% mínimo, etc.
+│   │   ├── dotnet-testing-standards.md      # ⭐ EXISTE en SisteDocs (automatización + mutación)
+│   │   ├── angular-testing-standards.md     # A CREAR (extraer de plantillas)
+│   │   ├── ios-testing-standards.md         # A CREAR
+│   │   ├── android-testing-standards.md     # A CREAR
+│   │   ├── integration-test-guidelines.md   # A CREAR
+│   │   ├── coverage-requirements.json       # Definir (80% estándar)
 │   │   └── test-templates/
+│   ├── integraciones/
+│   │   ├── server-sent-events.md            # ⭐ EXISTE en SisteDocs
+│   │   └── webhooks.md                      # ⭐ EXISTE en SisteDocs
 │   ├── deployment/
-│   │   ├── pipeline-templates/
+│   │   ├── aks-deployment-templates/
+│   │   ├── helm-charts-standards.md
+│   │   ├── azure-pipelines-templates/
+│   │   ├── github-actions-templates/
 │   │   ├── environment-configs/
 │   │   └── deployment-checklist.md
+│   ├── sistema-diseno/
+│   │   ├── angular-design-system.md         # ⭐ EXISTE en SisteDocs (componentes)
+│   │   └── versionamiento.md                # ⭐ EXISTE en SisteDocs
 │   └── documentation/
 │       ├── readme-template.md
 │       ├── api-doc-template.md
 │       └── changelog-format.md
 ├── agents/
-│   ├── development/
-│   │   ├── code-generator/
-│   │   │   ├── config.json               # Referencia a knowledge-base
-│   │   │   ├── instructions.md           # "Usa Java Standards de Sistecredito"
+│   ├── backend-dotnet/                      # Agentes para .NET Backend
+│   │   ├── dotnet-code-generator/
+│   │   │   ├── config.json                  # Referencia a csharp-dotnet-standards.md
+│   │   │   ├── instructions.md
 │   │   │   ├── prompts/
 │   │   │   └── examples/
-│   │   ├── refactoring-expert/
-│   │   ├── debugging-assistant/
-│   │   └── architecture-advisor/
+│   │   ├── dotnet-refactoring-expert/
+│   │   ├── grpc-service-generator/          # Genera servicios gRPC en .NET
+│   │   ├── service-bus-helper/              # Azure Service Bus patterns
+│   │   ├── entity-framework-helper/
+│   │   └── dotnet-debugging-assistant/
+│   ├── frontend-web/                        # Agentes para Angular
+│   │   ├── angular-code-generator/
+│   │   ├── angular-component-generator/
+│   │   ├── angular-service-generator/
+│   │   ├── rxjs-helper/                     # Reactive programming
+│   │   └── angular-refactoring-expert/
+│   ├── frontend-mobile/                     # Agentes para iOS y Android
+│   │   ├── ios-code-generator/
+│   │   ├── android-code-generator/
+│   │   ├── mobile-ui-helper/
+│   │   └── mobile-debugging-assistant/
+│   ├── bff-nestjs/                          # Agentes para BFF en NestJS
+│   │   ├── nestjs-code-generator/
+│   │   ├── nestjs-controller-generator/
+│   │   ├── api-management-integrator/       # Azure API Management
+│   │   └── graphql-helper/                  # Si usan GraphQL
 │   ├── testing/
-│   │   ├── unit-test-generator/
+│   │   ├── dotnet-test-generator/           # xUnit, NUnit
+│   │   ├── angular-test-generator/          # Jasmine, Karma
+│   │   ├── ios-test-generator/              # XCTest
+│   │   ├── android-test-generator/          # JUnit, Espresso
 │   │   ├── integration-tester/
 │   │   ├── test-coverage-analyzer/
-│   │   └── qa-automation-helper/
+│   │   └── e2e-test-designer/
 │   ├── code-review/
-│   │   ├── security-scanner/             # Aplica OWASP de Sistecredito
-│   │   ├── standards-enforcer/           # Valida coding standards
+│   │   ├── security-scanner/                # OWASP + Azure security
+│   │   ├── standards-enforcer/              # Valida todos los standards
 │   │   ├── performance-reviewer/
-│   │   └── architecture-validator/       # Valida vs arquitecturas aprobadas
+│   │   └── architecture-validator/
 │   ├── documentation/
-│   │   ├── api-doc-generator/
+│   │   ├── api-doc-generator/               # OpenAPI + gRPC docs
 │   │   ├── readme-writer/
 │   │   ├── changelog-maintainer/
 │   │   └── diagram-generator/
-│   └── deployment/
-│       ├── pipeline-generator/
-│       ├── config-manager/
-│       ├── docker-expert/
-│       └── k8s-helper/
+│   ├── deployment-azure/                    # Agentes para AKS y Azure
+│   │   ├── aks-deployment-generator/
+│   │   ├── helm-chart-generator/
+│   │   ├── azure-pipeline-generator/
+│   │   ├── github-actions-generator/
+│   │   ├── azure-config-manager/
+│   │   └── terraform-azure-helper/
+│   └── database/
+│       ├── sql-server-helper/
+│       ├── postgresql-helper/
+│       ├── cosmosdb-helper/
+│       └── entity-framework-migration-generator/
 ├── mcp-server/
 │   ├── package.json
 │   ├── server.js
@@ -480,90 +599,162 @@ Un script que:
 
 ## Plan de Implementación
 
-### Fase 0: Recopilación de Prácticas Tecnológicas (Semana 0-1)
-- [ ] **CRÍTICO**: Reunir con Arquitecto Principal y leads técnicos
-- [ ] Recopilar documentación existente de estándares
-- [ ] Inventariar librerías aprobadas/prohibidas actuales
-- [ ] Documentar arquitecturas y patrones en uso
-- [ ] Recopilar políticas de seguridad existentes
-- [ ] Identificar prácticas no documentadas (conocimiento tribal)
-- [ ] Crear primera versión del knowledge-base
-- [ ] Validar y aprobar knowledge-base con Comité Ejecutivo
+### Fase 0: Extracción y Análisis de SisteDocs (Semana 0-1) ⭐ CRÍTICA
+
+**OBJETIVO**: Extraer toda la documentación existente de SisteDocs y crear el knowledge base inicial.
+
+- [ ] **Inventariar SisteDocs completo**
+  - [ ] Mapear todas las URLs de documentación relevante
+  - [ ] Crear sistedocs-urls.json con catálogo completo
+  - [ ] Identificar secciones de DevOps (pendiente por error 500)
+  
+- [ ] **Extraer documentación existente**
+  - [ ] Plantillas de desarrollo:
+    - [ ] Clean Architecture (.NET, NestJS, Angular)
+    - [ ] DDD Architecture (.NET)
+    - [ ] Feature-based Architecture (Angular)
+    - [ ] Minimal APIs (.NET)
+    - [ ] Azure Functions (.NET)
+  - [ ] Seguridad:
+    - [ ] Guía Back .NET
+    - [ ] Guía Web
+    - [ ] Azure AD B2C
+    - [ ] Back to Back authentication
+    - [ ] Observabilidad
+  - [ ] Testing:
+    - [ ] Automatización pruebas unitarias .NET
+    - [ ] Mutación de pruebas .NET
+  - [ ] Integraciones:
+    - [ ] Server-Sent Events
+    - [ ] Webhooks
+  - [ ] Sistema de diseño Angular
+
+- [ ] **Crear script de sincronización automática**
+  - [ ] Script Node.js que extraiga HTML de SisteDocs
+  - [ ] Conversión de HTML a Markdown
+  - [ ] Detección de cambios (comparar con última versión)
+  - [ ] Notificación de actualizaciones
+
+- [ ] **Identificar gaps de documentación**
+  - [ ] Estándares específicos de C#/.NET (naming, arquitectura)
+  - [ ] Estándares de TypeScript/Angular detallados
+  - [ ] Librerías aprobadas/prohibidas por tecnología
+  - [ ] Estándares iOS/Android nativos
+  - [ ] Estándares gRPC detallados
+  - [ ] Políticas OWASP específicas
+  - [ ] Configuraciones Azure (AKS, Service Bus, Key Vault)
+  - [ ] Estándares de bases de datos
+
+- [ ] **Priorizar gaps críticos**
+  - [ ] Crear issues en backlog para documentación faltante
+  - [ ] Definir quién es responsable de cada gap
+  - [ ] Establecer timeline para completar gaps
+
+- [ ] **Validación con stakeholders**
+  - [ ] Revisar documentación extraída con Arquitecto Principal
+  - [ ] Validar con Security Lead
+  - [ ] Aprobar knowledge base inicial con Comité Ejecutivo
+
+**ENTREGABLES**:
+- ✅ knowledge-base/ poblado con docs de SisteDocs
+- ✅ sistedocs-sync/ con script funcional
+- ✅ Reporte de gaps identificados
+- ✅ Backlog priorizado de docs faltantes
 
 ### Fase 1: Fundamentos y Diseño (Semana 1-2)
+### Fase 1: Completar Knowledge Base y Diseño (Semana 2-3)
+
+- [ ] **Completar documentación faltante crítica**
+  - [ ] Estándares C#/.NET detallados (naming, arquitectura)
+  - [ ] approved-nuget-packages.json (extraer de plantillas + validar)
+  - [ ] approved-npm-packages.json (extraer de plantillas Angular/NestJS)
+  - [ ] Estándares gRPC (basado en referencias en plantillas)
+  - [ ] OWASP compliance detallado (basado en guías existentes)
+  
 - [ ] Definir catálogo de agentes SDLC requeridos con stakeholders
-- [ ] Priorizar agentes: identificar 5 críticos para piloto
+- [ ] Priorizar agentes: identificar 5 críticos para piloto basados en docs existentes
 - [ ] Investigar estructura técnica de MCP servers
 - [ ] Definir schema de configuración (config.json) con campos empresariales
-- [ ] Diseñar estructura del repositorio central con knowledge-base
+- [ ] Diseñar integración con SisteDocs (sincronización bidireccional)
 - [ ] Establecer Comité de Gobernanza (miembros y roles)
 - [ ] Definir procesos de gobernanza (creación, actualización, deprecation)
 - [ ] Documentar enforcement levels (bloqueante vs warning)
 - [ ] Crear templates para desarrollo de agentes
 
-### Fase 2: Repositorio Central y Knowledge Base (Semana 2-3)
+### Fase 2: Repositorio Central y Knowledge Base (Semana 3-4)
 - [ ] Crear repositorio `sistecredito/copilot-agents` (privado)
 - [ ] Implementar estructura de carpetas completa:
   - [ ] /knowledge-base/ con subdirectorios
+  - [ ] /knowledge-base/sistedocs-sync/ con script de sincronización
   - [ ] /agents/ por categoría SDLC
   - [ ] /governance/
   - [ ] /mcp-server/
   - [ ] /scripts/
-- [ ] Poblar knowledge-base inicial:
-  - [ ] java-standards.md, python-standards.md
-  - [ ] approved-libraries.json
-  - [ ] owasp-compliance.md
-  - [ ] architecture-patterns.md
+- [ ] Poblar knowledge-base con docs extraídos de SisteDocs:
+  - [ ] Migrar todas las plantillas de desarrollo
+  - [ ] Migrar guías de seguridad
+  - [ ] Migrar lineamientos de testing
+  - [ ] Migrar sistema de diseño Angular
+  - [ ] Migrar lineamientos de integraciones
+- [ ] Completar docs faltantes críticos (de Fase 1)
+- [ ] Configurar sincronización automática con SisteDocs:
+  - [ ] Script ejecutable manualmente
+  - [ ] Webhook de SisteDocs (si disponible) o polling
+  - [ ] Validación de cambios antes de aplicar
 - [ ] Configurar branch protection (main requiere 2 aprobaciones)
 - [ ] Crear manifest.json con versionado semántico
-- [ ] Agregar CI/CD para validación (GitHub Actions):
+- [ ] Agregar CI/CD para validación (Azure Pipelines o GitHub Actions):
   - [ ] Validar JSON schemas
   - [ ] Validar Markdown lint
   - [ ] Validar links en knowledge-base
+  - [ ] Validar sincronización con SisteDocs
 - [ ] Crear README con arquitectura completa
 - [ ] Documentar governance model en /governance/
 
-### Fase 3: Agentes Piloto Críticos (Semana 3-5)
-**Prioridad**: 5 agentes más críticos basados en impacto
+### Fase 3: Agentes Piloto Críticos (Semana 4-6)
+**Prioridad**: 5 agentes más críticos basados en documentación EXISTENTE en SisteDocs
 
-- [ ] **Agent 1: standards-enforcer** (BLOQUEANTE)
-  - [ ] Implementar validación de naming conventions
-  - [ ] Validar estructura de proyectos
-  - [ ] Detectar librerías prohibidas
-  - [ ] Generar warnings/errors según severidad
-  - [ ] Testing exhaustivo con 10+ proyectos reales
+- [ ] **Agent 1: dotnet-clean-architecture-generator** ⭐⭐⭐ (BASADO EN SISTEDOCS)
+  - [ ] Carga plantilla Clean Architecture de SisteDocs
+  - [ ] Genera proyectos .NET con estructura estándar
+  - [ ] Aplica naming conventions
+  - [ ] Incluye referencias a NuGet packages aprobados
+  - [ ] Testing con proyectos reales
   
-- [ ] **Agent 2: security-scanner** (BLOQUEANTE)
-  - [ ] Implementar detección OWASP Top 10
-  - [ ] Detectar secrets hardcoded
-  - [ ] Validar uso correcto de encriptación
-  - [ ] Integrar con SonarQube (opcional)
+- [ ] **Agent 2: security-scanner** ⭐⭐⭐ (BASADO EN SISTEDOCS)
+  - [ ] Implementa validaciones de "Guía Back .NET" de SisteDocs
+  - [ ] Implementa validaciones de "Guía Web" de SisteDocs
+  - [ ] Valida Azure AD B2C correctamente implementado
+  - [ ] Detecta secretos hardcoded
+  - [ ] Integra con SonarCloud (ya usan según SisteDocs)
   - [ ] Testing con código vulnerable conocido
   
-- [ ] **Agent 3: code-generator**
-  - [ ] Implementar generación de código por lenguaje
-  - [ ] Cargar standards dinámicamente
-  - [ ] Aplicar templates de Sistecredito
-  - [ ] Incluir logging/error handling automático
-  - [ ] Testing con casos de uso reales
-  
-- [ ] **Agent 4: unit-test-generator**
-  - [ ] Analizar código y generar tests
-  - [ ] Aplicar AAA pattern
-  - [ ] Generar mocks apropiados
-  - [ ] Aplicar naming conventions
+- [ ] **Agent 3: dotnet-test-generator** ⭐⭐ (BASADO EN SISTEDOCS)
+  - [ ] Implementa lineamientos de "Automatización pruebas unitarias .NET"
+  - [ ] Genera tests con xUnit/NUnit según estándar
+  - [ ] Aplica mutación de tests según lineamiento
+  - [ ] Genera mocks apropiados
   - [ ] Testing: validar que tests generados pasen
   
-- [ ] **Agent 5: architecture-validator** (BLOQUEANTE)
-  - [ ] Detectar violaciones de capas
-  - [ ] Validar patrones arquitectónicos
-  - [ ] Verificar single responsibility
-  - [ ] Testing con arquitecturas válidas e inválidas
+- [ ] **Agent 4: angular-component-generator** ⭐⭐ (BASADO EN SISTEDOCS)
+  - [ ] Carga plantilla Angular de SisteDocs (Clean/Feature-based)
+  - [ ] Usa sistema de diseño Angular existente
+  - [ ] Genera componentes con estructura estándar
+  - [ ] Aplica naming conventions
+  - [ ] Testing con proyectos Angular reales
+  
+- [ ] **Agent 5: nestjs-bff-generator** ⭐⭐ (BASADO EN SISTEDOCS)
+  - [ ] Carga plantilla NestJS BFF de SisteDocs
+  - [ ] Genera controllers y services
+  - [ ] Implementa integraciones (SSE, Webhooks según lineamientos)
+  - [ ] Aplica autenticación B2C
+  - [ ] Testing con proyectos NestJS reales
 
 - [ ] Crear examples/ para cada agente con casos de uso
 - [ ] Documentar config.json y instructions.md de cada uno
-- [ ] Validar que agentes cargan knowledge-base correctamente
+- [ ] **Validar que agentes aplican EXACTAMENTE lo de SisteDocs**
 - [ ] Code review interno de cada agente
+- [ ] Validación con usuarios del área de Ingeniería
 
 ### Fase 4: Servidor MCP Empresarial (Semana 5-6)
 - [ ] Setup proyecto Node.js + TypeScript
@@ -625,12 +816,50 @@ Un script que:
 ## Consideraciones Técnicas
 
 ### Stack Tecnológico Recomendado
-- **Servidor MCP**: Node.js (TypeScript) - mejor integración con ecosistema JS
-- **Scripts de despliegue**: Bash + PowerShell + Python (para instalador unificado)
-- **Formato de configuración**: JSON (config) + Markdown (instructions)
-- **Sincronización**: Git + GitHub API
-- **CI/CD**: GitHub Actions para validación automática
-- **Autenticación**: GitHub PAT o GitHub App
+- **Servidor MCP**: Node.js 20+ (TypeScript) - mejor integración con ecosistema JS y NestJS
+- **Scripts de despliegue**: PowerShell (Windows) + Bash (macOS/Linux)
+- **Sincronización SisteDocs**: Node.js con Cheerio/Puppeteer para HTML parsing
+- **Formato de configuración**: JSON (config) + Markdown (instructions) + Protobuf (gRPC)
+- **Sincronización agentes**: Git + Azure DevOps API / GitHub API
+- **CI/CD**: Azure Pipelines para validación automática de agentes
+- **Autenticación**: Azure DevOps PAT o GitHub PAT
+- **Cloud**: Azure como principal (Key Vault, Service Bus, AKS, etc.)
+
+### Ventajas de Tener SisteDocs
+
+✅ **Documentación ya existe** - No partir de cero
+✅ **Plantillas establecidas** - Clean Architecture, DDD, Feature-based
+✅ **Guías de seguridad** - Back .NET y Web ya documentadas
+✅ **Testing standards** - Automatización y mutación ya definidos
+✅ **Sistema de diseño** - Angular components ya estandarizados
+✅ **Integraciones** - SSE y Webhooks ya tienen lineamientos
+✅ **Azure B2C** - Autenticación ya documentada
+✅ **Observabilidad** - Ya tienen prácticas definidas
+
+### Desafíos Identificados
+
+⚠️ **Documentación faltante**:
+- Estándares específicos de C#/.NET (naming, convenciones)
+- Librerías aprobadas/prohibidas por tecnología
+- Estándares iOS/Android nativos
+- Políticas OWASP detalladas
+- Configuraciones Azure específicas
+
+⚠️ **Sincronización con SisteDocs**:
+- No hay API oficial → requiere web scraping
+- Detección de cambios no trivial
+- Versionado de documentación en SisteDocs no claro
+
+⚠️ **Completitud del SDLC**:
+- SisteDocs cubre ~60-70% del SDLC completo
+- Faltan áreas como: móvil nativo, bases de datos detalladas, DevOps completo
+
+### Plan de Mitigación
+
+1. **Sincronización SisteDocs**: Script robusto con cache y detección de cambios
+2. **Documentación faltante**: Fase 0 identifica gaps, Fase 1 completa críticos
+3. **Validación continua**: Comité revisa knowledge base mensualmente
+4. **Evolución incremental**: Agentes piloto usan lo que existe, se expande después
 
 ## Modelo de Gobierno
 
@@ -780,141 +1009,293 @@ Issue: "Agregar nueva librería aprobada: Apache Kafka"
 
 ---
 
-## Catálogo Completo de Agentes Requeridos
+## Catálogo Completo de Agentes Requeridos (Stack Sistecredito)
 
-### Agentes SDLC Propuestos
+### Categoría: Backend .NET (Prioridad MUY ALTA)
 
-#### Categoría: Development
-1. **code-generator** ⭐ CRÍTICO
-   - **Propósito**: Genera código siguiendo EXACTAMENTE estándares de Sistecredito
-   - **Knowledge Base**: java-standards.md, python-standards.md, approved-libraries.json
+1. **dotnet-code-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera código .NET C# siguiendo estándares de Sistecredito
+   - **Knowledge Base**: csharp-dotnet-standards.md, approved-nuget-packages.json, microservices-dotnet-guidelines.md
    - **Operación**: 
-     - Valida lenguaje del proyecto
-     - Carga estándares específicos del lenguaje
-     - Genera código con naming conventions correctas
-     - Incluye imports de librerías aprobadas
-     - Agrega logging/error handling estándar
-   - **Ejemplo**: "Genera un servicio REST para consultar clientes"
-     - ✅ Usa Spring Boot (aprobado)
-     - ✅ Sigue naming: `ClienteService`, `ClienteController`
-     - ✅ Incluye manejo de errores corporativo
-     - ✅ Logs con framework aprobado
+     - Genera Controllers, Services, Repositories con arquitectura de 3 capas
+     - Aplica naming conventions de C# y Sistecredito
+     - Usa solo paquetes NuGet aprobados
+     - Incluye ILogger<T> para logging
+     - Agrega manejo de errores con middleware
+     - Implementa HealthChecks automáticamente
+   - **Ejemplo**: "Genera un servicio para gestionar clientes"
+     - ✅ Usa ASP.NET Core + EF Core
+     - ✅ ClienteController → ClienteService → ClienteRepository
+     - ✅ ILogger<ClienteService> inyectado
+     - ✅ Global exception handler middleware
+     - ✅ Health checks endpoint
 
-2. **refactoring-expert**
-   - **Propósito**: Refactoriza código legacy a estándares actuales
-   - **Knowledge Base**: Todos los standards, architecture patterns
-   - **Operación**: Identifica code smells, sugiere mejoras alineadas con Sistecredito
-
-3. **debugging-assistant**
-   - **Propósito**: Análisis de bugs considerando arquitectura de Sistecredito
-   - **Knowledge Base**: architecture guidelines, common-issues.md
-   - **Operación**: Analiza stack traces, sugiere fixes conocidos en Sistecredito
-
-4. **database-helper** ⭐ CRÍTICO
-   - **Propósito**: Genera SQL siguiendo estándares de bases de datos
-   - **Knowledge Base**: sql-standards.md, database-patterns.md
+2. **grpc-service-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera servicios gRPC para comunicación entre microservicios
+   - **Knowledge Base**: grpc-standards.md, grpc-communication-patterns.md
    - **Operación**:
-     - Valida naming de tablas/columnas
-     - Sugiere índices apropiados
-     - Aplica políticas de seguridad (no hardcoded passwords)
-     - Genera migrations con versionado correcto
+     - Genera .proto files siguiendo convenciones
+     - Implementa servicios gRPC server y client
+     - Aplica TLS para seguridad
+     - Incluye interceptors para logging/tracing
+     - Manejo de errores con gRPC status codes
+   - **Ejemplo**: "Genera servicio gRPC para consultar saldo de cliente"
+     - ✅ archivo cliente.proto con mensajes y servicios
+     - ✅ ClienteGrpcService implementación
+     - ✅ ClienteGrpcClient con retry policy
+     - ✅ Logging interceptor
 
-5. **architecture-advisor** ⭐ CRÍTICO
-   - **Propósito**: Guía decisiones arquitectónicas
-   - **Knowledge Base**: approved-architectures.json, microservices-guidelines.md
+3. **service-bus-helper** ⭐ CRÍTICO
+   - **Propósito**: Genera código para Azure Service Bus (pub/sub, queues)
+   - **Knowledge Base**: service-bus-configuration.md, service-bus-patterns.md
    - **Operación**:
-     - "¿Debo usar microservicio o monolito?" → responde según políticas
-     - Valida que el diseño propuesto esté aprobado
-     - Sugiere patrones específicos de Sistecredito
+     - Genera publishers y subscribers
+     - Aplica patterns de retry y dead-letter
+     - Maneja serialización de mensajes
+     - Incluye telemetría
 
-#### Categoría: Testing
-1. **unit-test-generator** ⭐ CRÍTICO
-   - **Propósito**: Genera tests unitarios siguiendo estándares de Sistecredito
-   - **Knowledge Base**: unit-test-requirements.md, test-templates/
+4. **entity-framework-helper** ⭐ CRÍTICO
+   - **Propósito**: Genera DbContext, Entities, Migrations siguiendo standards
+   - **Knowledge Base**: csharp-dotnet-standards.md, sql-standards.md
    - **Operación**:
-     - Genera tests con framework aprobado (JUnit, pytest, Jest)
-     - Sigue estructura de tests de Sistecredito (AAA: Arrange-Act-Assert)
-     - Incluye mocks apropiados
-     - Aplica naming conventions: `test_<metodo>_<escenario>_<resultado>`
-   - **Ejemplo**: Para método `calcularInteres()`
-     - ✅ `test_calcularInteres_montoPositivo_retornaInteresCalculado()`
-     - ✅ `test_calcularInteres_montoNegativo_lanzaExcepcion()`
+     - Genera DbContext con configuraciones
+     - Entities con Data Annotations / Fluent API
+     - Migrations con naming correcto
+     - Repository pattern implementation
 
-2. **integration-tester**
-   - **Propósito**: Diseña tests de integración end-to-end
+5. **dotnet-refactoring-expert**
+   - **Propósito**: Refactoriza código .NET legacy a estándares actuales
+   - **Knowledge Base**: csharp-dotnet-standards.md
+   - **Operación**: Detecta code smells en C#, sugiere SOLID principles
+
+6. **dotnet-debugging-assistant**
+   - **Propósito**: Ayuda a debuggear aplicaciones .NET
+   - **Knowledge Base**: common-dotnet-issues.md
+   - **Operación**: Analiza stack traces, sugiere fixes conocidos
+
+### Categoría: Frontend Web - Angular (Prioridad ALTA)
+
+1. **angular-code-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera código Angular siguiendo estándares de Sistecredito
+   - **Knowledge Base**: angular-standards.md, typescript-standards.md, approved-npm-packages.json
+   - **Operación**:
+     - Genera Components con OnPush change detection
+     - Services con HttpClient y RxJS
+     - Aplica arquitectura de modules
+     - Usa Angular Material (si está aprobado)
+     - Implementa reactive forms
+   - **Ejemplo**: "Genera componente para formulario de clientes"
+     - ✅ cliente-form.component.ts con reactive form
+     - ✅ Validaciones custom
+     - ✅ OnPush change detection
+     - ✅ TypeScript strict mode
+
+2. **angular-component-generator**
+   - **Propósito**: Genera componentes Angular standalone o con módulos
+   - **Knowledge Base**: angular-architecture.md
+   - **Operación**: Genera component, template, styles, spec
+
+3. **angular-service-generator**
+   - **Propósito**: Genera servicios Angular con HttpClient
+   - **Knowledge Base**: angular-standards.md
+   - **Operación**: Genera servicios que consumen APIs REST o gRPC-web
+
+4. **rxjs-helper** ⭐ CRÍTICO
+   - **Propósito**: Ayuda con operadores RxJS y reactive programming
+   - **Knowledge Base**: angular-standards.md, rxjs-patterns.md
+   - **Operación**: Sugiere operadores correctos, evita memory leaks
+
+5. **angular-refactoring-expert**
+   - **Propósito**: Refactoriza código Angular legacy
+   - **Knowledge Base**: angular-standards.md
+   - **Operación**: Migra a standalone components, signals (Angular 16+)
+
+### Categoría: Frontend Mobile - iOS/Android (Prioridad ALTA)
+
+1. **ios-code-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera código iOS nativo (Swift/Objective-C)
+   - **Knowledge Base**: ios-standards.md, approved-cocoapods.json
+   - **Operación**:
+     - Genera ViewControllers con MVVM o VIPER
+     - Usa Swift 5+
+     - Implementa networking con URLSession/Alamofire
+     - Apply Auto Layout constraints
+     - Usa Combine para reactive programming
+   - **Ejemplo**: "Genera pantalla de login"
+     - ✅ LoginViewController con MVVM
+     - ✅ LoginViewModel con validaciones
+     - ✅ Networking service
+     - ✅ Keychain para almacenar tokens
+
+2. **android-code-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera código Android nativo (Kotlin/Java)
+   - **Knowledge Base**: android-standards.md, approved-gradle-dependencies.json
+   - **Operación**:
+     - Genera Activities/Fragments con MVVM
+     - Usa Kotlin preferentemente
+     - Implementa networking con Retrofit
+     - Room para base de datos local
+     - Jetpack Compose o XML layouts
+   - **Ejemplo**: "Genera pantalla de clientes"
+     - ✅ ClientesFragment con ViewModel
+     - ✅ ClientesViewModel con LiveData/Flow
+     - ✅ Repository pattern
+     - ✅ Retrofit service interface
+
+3. **mobile-ui-helper**
+   - **Propósito**: Ayuda con UI/UX mobile siguiendo design system
+   - **Knowledge Base**: mobile-design-system.md
+   - **Operación**: Genera componentes UI reutilizables
+
+4. **mobile-debugging-assistant**
+   - **Propósito**: Debugging específico de iOS/Android
+   - **Knowledge Base**: mobile-common-issues.md
+   - **Operación**: Analiza crashes, memory leaks
+
+### Categoría: BFF - NestJS (Prioridad ALTA)
+
+1. **nestjs-code-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera código NestJS para BFF
+   - **Knowledge Base**: nestjs-standards.md, bff-pattern.md, approved-npm-packages.json
+   - **Operación**:
+     - Genera Controllers, Services, Modules
+     - Implementa DTOs con class-validator
+     - Integra con Azure API Management
+     - Usa @nestjs/axios para llamadas HTTP
+     - Implementa guards para autenticación
+   - **Ejemplo**: "Genera BFF endpoint para clientes"
+     - ✅ ClientesController con @Controller()
+     - ✅ ClientesService que consume backend .NET via gRPC
+     - ✅ DTOs con validaciones
+     - ✅ Guards JWT
+
+2. **api-management-integrator** ⭐ CRÍTICO
+   - **Propósito**: Configura integración con Azure API Management
+   - **Knowledge Base**: api-management-policies.md
+   - **Operación**:
+     - Genera políticas de API Management
+     - Configura rate limiting, CORS
+     - Implementa transformaciones de request/response
+
+3. **graphql-helper**
+   - **Propósito**: Si usan GraphQL, genera resolvers y schemas
+   - **Knowledge Base**: graphql-standards.md
+   - **Operación**: Genera GraphQL schema y resolvers en NestJS
+
+### Categoría: Testing (Prioridad ALTA)
+1. **dotnet-test-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera tests unitarios para .NET
+   - **Knowledge Base**: dotnet-testing-standards.md, test-templates/
+   - **Operación**:
+     - Genera tests con xUnit o NUnit (según aprobado)
+     - Usa Moq para mocking
+     - Aplica AAA pattern (Arrange-Act-Assert)
+     - FluentAssertions para assertions legibles
+     - Naming: `MethodName_Scenario_ExpectedResult`
+   - **Ejemplo**: Para `ClienteService.ObtenerCliente()`
+     - ✅ `ObtenerCliente_ClienteExiste_RetornaCliente()`
+     - ✅ `ObtenerCliente_ClienteNoExiste_LanzaNotFoundException()`
+     - ✅ Mock de IClienteRepository
+
+2. **angular-test-generator** ⭐ CRÍTICO
+   - **Propósito**: Genera tests para Angular
+   - **Knowledge Base**: angular-testing-standards.md
+   - **Operación**:
+     - Genera tests con Jasmine/Karma o Jest
+     - TestBed para componentes
+     - Mock de servicios
+     - Testing de reactive forms
+
+3. **ios-test-generator** ⭐ CRÍTICO
+   - **Propósito**: Genera tests para iOS
+   - **Knowledge Base**: ios-testing-standards.md
+   - **Operación**:
+     - XCTest para unit tests
+     - XCUITest para UI tests
+     - Mock de networking
+
+4. **android-test-generator** ⭐ CRÍTICO
+   - **Propósito**: Genera tests para Android
+   - **Knowledge Base**: android-testing-standards.md
+   - **Operación**:
+     - JUnit 5 para unit tests
+     - Espresso para UI tests
+     - Mockito o MockK para mocking
+
+5. **integration-tester**
+   - **Propósito**: Genera tests de integración end-to-end
    - **Knowledge Base**: integration-test-guidelines.md
-   - **Operación**: Genera tests que validan flujos completos
+   - **Operación**: Tests que validan flujos completos (BFF → Backend → DB)
 
-3. **test-coverage-analyzer** ⭐ CRÍTICO
-   - **Propósito**: Valida que la cobertura cumple requisitos (80% mínimo)
+6. **test-coverage-analyzer** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Valida cobertura >= 80% en todos los proyectos
    - **Knowledge Base**: coverage-requirements.json
    - **Operación**:
-     - Analiza reporte de cobertura
-     - Identifica métodos sin tests
+     - Analiza reportes de cobertura (.NET: coverlet, Angular: Karma)
+     - **BLOQUEA** PR si < 80%
      - Sugiere tests faltantes priorizados
-     - **BLOQUEA** PR si cobertura < 80%
 
-4. **e2e-test-designer**
-   - **Propósito**: Genera tests E2E con frameworks aprobados
-   - **Knowledge Base**: e2e-frameworks.json (Selenium, Playwright)
-   - **Operación**: Crea scenarios de testing basados en user stories
-
-5. **qa-automation-helper**
-   - **Propósito**: Asiste QA en automatización de casos de prueba
-   - **Knowledge Base**: qa-best-practices.md
-   - **Operación**: Convierte casos manuales a scripts automatizados
-
-#### Categoría: Code Review (Agentes Guardianes)
-1. **security-scanner** ⭐⭐ MUY CRÍTICO
+### Categoría: Code Review (Agentes Guardianes) (Prioridad MUY ALTA)
+1. **security-scanner** ⭐⭐⭐ CRÍTICO MÁXIMO
    - **Propósito**: Detecta vulnerabilidades aplicando políticas de seguridad de Sistecredito
-   - **Knowledge Base**: owasp-compliance.md, security-checklist.json, vulnerability-db/
+   - **Knowledge Base**: owasp-compliance.md, azure-security-standards.md, mobile-security-*.md
    - **Operación**:
-     - Escanea código en búsqueda de OWASP Top 10
-     - Detecta secrets hardcoded (API keys, passwords)
-     - Valida uso de encriptación en datos sensibles
-     - Verifica autenticación/autorización correcta
-     - **BLOQUEA** PR si encuentra vulnerabilidades CRITICAL
+     - Escanea código .NET, Angular, iOS, Android en búsqueda de OWASP Top 10
+     - Detecta secrets hardcoded (connection strings, API keys, passwords)
+     - Valida uso de Azure Key Vault para secretos
+     - Verifica autenticación/autorización en APIs (.NET + NestJS)
+     - Valida configuración de Azure API Management
+     - **BLOQUEA** PR si encuentra vulnerabilidades CRITICAL/HIGH
    - **Ejemplo de Bloqueo**:
-     - ❌ Password en código: `String pass = "admin123";`
-     - ❌ SQL Injection: `query = "SELECT * FROM users WHERE id=" + userId`
-     - ❌ XSS: No sanitiza input del usuario
+     - ❌ Connection string en appsettings.json: `"ConnectionString": "Server=..."`
+     - ❌ SQL Injection en EF Core: `context.Clientes.FromSqlRaw($"SELECT * FROM Clientes WHERE Id={id}")`
+     - ❌ API sin [Authorize] attribute en controller
+     - ❌ Secretos en código iOS/Android
 
-2. **standards-enforcer** ⭐⭐ MUY CRÍTICO
+2. **standards-enforcer** ⭐⭐⭐ CRÍTICO MÁXIMO
    - **Propósito**: Valida que el código cumple 100% con standards de Sistecredito
-   - **Knowledge Base**: Todos los *-standards.md
+   - **Knowledge Base**: Todos los *-standards.md por tecnología
    - **Operación**:
-     - Valida naming conventions
-     - Verifica estructura de carpetas
-     - Detecta uso de librerías prohibidas
-     - Valida documentación de métodos/clases
-     - Genera **WARNINGS** o **ERRORS** según severidad
+     - Valida naming conventions por lenguaje:
+       - .NET: PascalCase para clases/métodos
+       - Angular: kebab-case para components
+       - iOS: camelCase para properties
+       - Android: camelCase para variables
+     - Verifica estructura de carpetas/proyectos
+     - Detecta uso de paquetes prohibidos (NuGet, npm, CocoaPods, Gradle)
+     - Valida documentación XML (C#), JSDoc (TypeScript)
+     - **BLOQUEA** o **WARN** según severidad
    - **Ejemplo**:
-     - ❌ ERROR: Usa librería prohibida `log4j 1.x` → debe usar `logback`
-     - ⚠️ WARNING: Método sin documentación JSDoc
-     - ⚠️ WARNING: Nombre de variable no sigue camelCase
+     - ❌ ERROR: Usa paquete NuGet prohibido `Newtonsoft.Json 10.x` → debe usar `System.Text.Json`
+     - ❌ ERROR: Usa `var` donde se requiere tipo explícito
+     - ⚠️ WARNING: Método sin XML documentation comment
+     - ⚠️ WARNING: Angular component sin OnPush change detection
 
 3. **performance-reviewer**
-   - **Propósito**: Identifica cuellos de botella y anti-patterns de performance
+   - **Propósito**: Identifica problemas de performance
    - **Knowledge Base**: performance-patterns.md
    - **Operación**:
-     - Detecta N+1 queries
-     - Identifica loops anidados ineficientes
-     - Sugiere caching donde aplique
-     - Valida uso eficiente de conexiones BD
+     - Detecta N+1 queries en EF Core
+     - Identifica uso ineficiente de RxJS en Angular
+     - Sugiere uso de AsNoTracking() en EF Core
+     - Valida uso correcto de async/await en .NET
 
-4. **architecture-validator** ⭐ CRÍTICO
-   - **Propósito**: Valida que el diseño cumple arquitecturas aprobadas
-   - **Knowledge Base**: approved-architectures.json, microservices-guidelines.md
+4. **architecture-validator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Valida arquitectura contra patrones aprobados de Sistecredito
+   - **Knowledge Base**: approved-architectures.json, microservices-dotnet-guidelines.md, bff-pattern.md
    - **Operación**:
-     - Detecta violaciones de capas (ej: Controller llamando directamente a BD)
-     - Valida que microservicios cumplan principios (single responsibility)
-     - Verifica que se usan patrones aprobados (Repository, Factory, etc.)
+     - Valida arquitectura de 3 capas en .NET (Controller → Service → Repository)
+     - Verifica que BFF en NestJS no accede directamente a BD
+     - Valida que comunicación entre microservicios usa gRPC
+     - Valida que eventos asíncronos usan Azure Service Bus
+     - Detecta violaciones de single responsibility
      - **BLOQUEA** PR si viola arquitectura crítica
    - **Ejemplo de Bloqueo**:
-     - ❌ Controller accede directamente a BD (debe usar Service)
-     - ❌ Microservicio con más de 3 responsabilidades
+     - ❌ Controller accede directamente a DbContext (debe usar Service)
+     - ❌ Frontend Angular llama directamente a backend .NET (debe pasar por BFF NestJS)
+     - ❌ Microservicio usa HTTP REST en vez de gRPC para comunicación interna
 
-#### Categoría: Documentation
+### Categoría: Documentation (Prioridad MEDIA)
 1. **api-doc-generator** ⭐ CRÍTICO
    - **Propósito**: Genera documentación de APIs siguiendo template de Sistecredito
    - **Knowledge Base**: api-doc-template.md, openapi-standards.json
@@ -950,45 +1331,90 @@ Issue: "Agregar nueva librería aprobada: Apache Kafka"
      - Documenta flujos y dependencias
 
 #### Categoría: Deployment
-1. **pipeline-generator** ⭐ CRÍTICO
-   - **Propósito**: Genera pipelines CI/CD siguiendo templates de Sistecredito
-   - **Knowledge Base**: pipeline-templates/, deployment-checklist.md
+1. **aks-deployment-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera manifiestos Kubernetes para AKS
+   - **Knowledge Base**: aks-best-practices.md, deployment-templates/
    - **Operación**:
-     - Genera GitHub Actions / Jenkins pipelines
-     - Incluye stages estándar: build, test, security-scan, deploy
-     - Aplica políticas de deployment (staging → prod)
-     - Incluye rollback automático
-   - **Ejemplo**: Pipeline con:
-     - ✅ Build con Maven/Gradle aprobado
-     - ✅ Tests unitarios (cobertura 80%+)
+     - Genera Deployments, Services, Ingress para AKS
+     - Aplica resource limits (CPU/memoria) según estándares
+     - Incluye probes (liveness, readiness, startup)
+     - Configura HPA (Horizontal Pod Autoscaler)
+     - Integra con Azure Container Registry
+     - Configura secrets desde Azure Key Vault
+   - **Ejemplo**: "Genera deployment para servicio de clientes"
+     - ✅ Deployment con replicas configurables
+     - ✅ Service tipo ClusterIP
+     - ✅ Health checks en /health endpoint
+     - ✅ Secrets desde Key Vault con CSI driver
+
+2. **helm-chart-generator** ⭐ CRÍTICO
+   - **Propósito**: Genera Helm charts para deployment en AKS
+   - **Knowledge Base**: helm-charts-standards.md
+   - **Operación**:
+     - Genera Chart.yaml, values.yaml, templates/
+     - Aplica best practices de Helm
+     - Configuración por ambiente (dev, qa, prod)
+
+3. **azure-pipeline-generator** ⭐⭐ MUY CRÍTICO
+   - **Propósito**: Genera Azure Pipelines (YAML) para CI/CD
+   - **Knowledge Base**: azure-devops-pipelines.md, pipeline-templates/
+   - **Operación**:
+     - Genera pipelines para .NET, Angular, iOS, Android, NestJS
+     - Stages: Build → Test → Security Scan → Deploy to AKS
+     - Integra con SonarQube
+     - Deploy con estrategia Blue-Green o Canary
+   - **Ejemplo**: Pipeline para servicio .NET:
+     - ✅ Restore NuGet packages
+     - ✅ Build con dotnet build
+     - ✅ Tests con dotnet test + cobertura
      - ✅ SonarQube scan
-     - ✅ Deployment a K8s con canary
+     - ✅ Docker build y push a ACR
+     - ✅ Deploy a AKS con Helm
 
-2. **config-manager**
-   - **Propósito**: Gestiona configuraciones por ambiente sin hardcoding
-   - **Knowledge Base**: environment-configs/, secrets-management.md
-   - **Operación**:
-     - Genera archivos de config por env (dev, qa, prod)
-     - Usa secrets manager (Azure Key Vault, etc.)
-     - Valida que no hay secrets en código
+4. **github-actions-generator**
+   - **Propósito**: Genera GitHub Actions workflows si usan GitHub
+   - **Knowledge Base**: github-actions-templates/
+   - **Operación**: Similar a Azure Pipelines pero para GitHub Actions
 
-3. **docker-expert**
-   - **Propósito**: Genera Dockerfiles optimizados y seguros
-   - **Knowledge Base**: docker-best-practices.md, approved-base-images.json
+5. **azure-config-manager** ⭐ CRÍTICO
+   - **Propósito**: Gestiona configuraciones de Azure por ambiente
+   - **Knowledge Base**: environment-configs/, azure-services.md
    - **Operación**:
-     - Usa solo base images aprobadas
-     - Aplica multi-stage builds
-     - Minimiza layers y tamaño de imagen
-     - Incluye health checks
+     - Genera configuraciones de Azure Key Vault
+     - Configura Azure Service Bus (queues, topics, subscriptions)
+     - Configura Azure API Management
+     - Usa App Configuration de Azure
+     - **NO hardcodea** secretos
 
-4. **k8s-helper**
-   - **Propósito**: Genera manifiestos Kubernetes siguiendo standards
-   - **Knowledge Base**: k8s-templates/, helm-charts/
+6. **terraform-azure-helper**
+   - **Propósito**: Genera scripts Terraform para infraestructura Azure
+   - **Knowledge Base**: terraform-standards.md
+   - **Operación**: IaC para AKS, Service Bus, Key Vault, etc.
+
+### Categoría: Database (Prioridad MEDIA)
+
+1. **sql-server-helper** ⭐ CRÍTICO
+   - **Propósito**: Genera SQL para SQL Server siguiendo standards
+   - **Knowledge Base**: sql-standards.md
    - **Operación**:
-     - Genera Deployments, Services, Ingress
-     - Aplica resource limits (CPU/memoria)
-     - Incluye probes (liveness, readiness)
-     - Usa Helm charts aprobados
+     - Genera tablas, índices, stored procedures
+     - Valida naming conventions
+     - Optimiza queries
+
+2. **postgresql-helper**
+   - **Propósito**: Similar a SQL Server pero para PostgreSQL
+   - **Knowledge Base**: sql-standards.md
+   - **Operación**: Genera DDL optimizado para PostgreSQL
+
+3. **cosmosdb-helper**
+   - **Propósito**: Ayuda con consultas y modelado en CosmosDB
+   - **Knowledge Base**: cosmosdb-patterns.md
+   - **Operación**: Genera queries, sugiere partition keys
+
+4. **entity-framework-migration-generator**
+   - **Propósito**: Genera migrations de Entity Framework Core
+   - **Knowledge Base**: csharp-dotnet-standards.md
+   - **Operación**: Genera Up() y Down() methods con naming correcto
 
 ### Agentes Adicionales (Fase 2)
 
@@ -1009,58 +1435,105 @@ Issue: "Agregar nueva librería aprobada: Apache Kafka"
 ### Workflow Típico del Desarrollador
 
 ```
-1. INICIO DE TAREA
-   Developer: "@code-generator genera servicio REST para calcular préstamos"
+1. INICIO DE TAREA (Backend .NET)
+   Developer: "@dotnet-code-generator genera servicio REST para calcular cuotas de préstamos"
    Agent: 
-     ✓ Carga java-standards.md
-     ✓ Carga approved-libraries.json
-     ✓ Genera código con Spring Boot
-     ✓ Aplica naming: PrestamoService, PrestamoController
-     ✓ Incluye validaciones corporativas
-     ✓ Agrega logging estándar
+     ✓ Carga csharp-dotnet-standards.md
+     ✓ Carga approved-nuget-packages.json
+     ✓ Carga microservices-dotnet-guidelines.md
+     ✓ Genera código con ASP.NET Core
+     ✓ Aplica arquitectura 3 capas:
+       - PrestamoController (Api layer)
+       - PrestamoService (Application layer)
+       - PrestamoRepository (Infrastructure layer)
+     ✓ Usa Entity Framework Core
+     ✓ Incluye ILogger<PrestamoService>
+     ✓ Agrega health checks endpoint
+     ✓ Configura Swagger/OpenAPI
 
-2. ESCRIBIR TESTS
-   Developer: "@unit-test-generator crea tests para PrestamoService"
+2. GENERAR SERVICIO gRPC
+   Developer: "@grpc-service-generator genera servicio gRPC para consultar préstamos"
    Agent:
-     ✓ Carga test-templates/
-     ✓ Genera tests con JUnit 5
-     ✓ Aplica AAA pattern
-     ✓ 100% cobertura de métodos públicos
-     ✓ Naming: test_calcularPrestamo_montoValido_retornaResultado()
+     ✓ Carga grpc-standards.md
+     ✓ Genera prestamo.proto con messages y service
+     ✓ Implementa PrestamoGrpcService
+     ✓ Configura TLS para seguridad
+     ✓ Agrega logging interceptor
+     ✓ Genera cliente gRPC con retry policy
 
-3. CODE REVIEW AUTOMÁTICO
-   Developer: Hace commit y abre PR
-   Agents (ejecutados automáticamente en CI/CD):
+3. CREAR BFF (NestJS)
+   Developer: "@nestjs-code-generator genera BFF endpoint para préstamos"
+   Agent:
+     ✓ Carga nestjs-standards.md + bff-pattern.md
+     ✓ Genera PrestamoController en NestJS
+     ✓ PrestamoService que llama backend .NET via gRPC
+     ✓ DTOs con class-validator
+     ✓ Guards JWT para autenticación
+     ✓ Integración con Azure API Management
+
+4. FRONTEND ANGULAR
+   Developer: "@angular-code-generator genera componente para solicitar préstamo"
+   Agent:
+     ✓ Carga angular-standards.md
+     ✓ Genera prestamo-form.component.ts
+     ✓ Reactive form con validaciones
+     ✓ OnPush change detection
+     ✓ Service que consume BFF NestJS
+     ✓ RxJS para manejo de estado
+
+5. ESCRIBIR TESTS
+   Developer: "@dotnet-test-generator crea tests para PrestamoService"
+   Agent:
+     ✓ Carga dotnet-testing-standards.md
+     ✓ Genera tests con xUnit
+     ✓ Mock de IPrestamoRepository con Moq
+     ✓ Aplica AAA pattern
+     ✓ FluentAssertions para assertions
+     ✓ Naming: CalcularCuota_MontoValido_RetornaCuotaCalculada()
+     ✓ 100% cobertura de métodos públicos
+
+6. CODE REVIEW AUTOMÁTICO
+   Developer: Hace commit y abre PR en Azure DevOps
+   Agents (ejecutados automáticamente en Azure Pipeline):
      → @security-scanner:
-       ✓ No vulnerabilidades detectadas
+       ✓ No connection strings hardcoded
+       ✓ No vulnerabilidades OWASP
+       ✓ Validación de [Authorize] en controllers
+       ✓ Azure Key Vault usado para secretos
      → @standards-enforcer:
-       ⚠️ WARNING: 2 métodos sin JavaDoc
-       ✓ Resto cumple estándares
+       ✓ Naming conventions C# correctas
+       ✓ Usa solo NuGet packages aprobados
+       ⚠️ WARNING: 2 métodos sin XML documentation
+       ✓ Arquitectura 3 capas respetada
      → @test-coverage-analyzer:
        ✓ Cobertura: 85% (pasa el 80% mínimo)
      → @architecture-validator:
-       ✓ Arquitectura válida (3 capas: Controller-Service-Repository)
+       ✓ Controller → Service → Repository (correcto)
+       ✓ gRPC usado para comunicación con otros microservicios
+       ✓ No viola principios SOLID
 
-4. CORRECCIONES
-   Developer: "@refactoring-expert agrega JavaDoc faltante"
+7. DEPLOYMENT A AKS
+   Developer: "@aks-deployment-generator genera manifiestos K8s"
    Agent:
-     ✓ Genera JavaDoc siguiendo template
-     ✓ Incluye @param, @return, @throws
+     ✓ Carga aks-best-practices.md
+     ✓ Genera Deployment para servicio de préstamos
+     ✓ Service ClusterIP
+     ✓ Health checks (liveness, readiness)
+     ✓ Secrets desde Azure Key Vault (CSI driver)
+     ✓ Resource limits configurados
+     ✓ HPA (Horizontal Pod Autoscaler)
 
-5. DOCUMENTACIÓN
-   Developer: "@api-doc-generator documenta endpoints"
+8. GENERAR PIPELINE
+   Developer: "@azure-pipeline-generator crea CI/CD pipeline"
    Agent:
-     ✓ Genera OpenAPI 3.0
-     ✓ Aplica template de Sistecredito
-     ✓ Incluye ejemplos de request/response
-
-6. DEPLOYMENT
-   Developer: "@pipeline-generator crea pipeline para este servicio"
-   Agent:
-     ✓ Genera GitHub Actions workflow
-     ✓ Incluye stages: build, test, sonar, deploy
-     ✓ Deployment a K8s con canary
-     ✓ Rollback automático si falla
+     ✓ Carga azure-devops-pipelines.md
+     ✓ Genera azure-pipelines.yml:
+       - Stage: Build (.NET restore + build)
+       - Stage: Test (dotnet test + coverage)
+       - Stage: Security (SonarQube scan)
+       - Stage: Docker (build + push to ACR)
+       - Stage: Deploy (Helm deploy to AKS)
+       - Canary deployment strategy
 ```
 
 ### Integración con Git Workflow
@@ -1113,121 +1586,406 @@ feature/JIRA-123-prestamos
 
 ---
 
-## Ejemplos de Prácticas Tecnológicas Consignadas
+### Ejemplos de Prácticas Tecnológicas Consignadas (Stack Sistecredito)
 
-### Ejemplo 1: Java Standards (java-standards.md)
+### Ejemplo 1: C# .NET Standards (csharp-dotnet-standards.md)
 
 ```markdown
-# Java Standards - Sistecredito
+# C# .NET Standards - Sistecredito
 
 ## Versión
-- Java 17 LTS (mínimo)
-- Spring Boot 3.x
+- .NET 8+ (mínimo .NET 6 LTS)
+- C# 12 (language version latest)
+- ASP.NET Core 8.x
 
 ## Naming Conventions
-- Clases: PascalCase (ej: ClienteService)
-- Métodos: camelCase (ej: calcularInteres)
-- Constantes: UPPER_SNAKE_CASE (ej: MAX_INTENTOS)
-- Packages: lowercase (ej: com.sistecredito.prestamos)
+- Clases: PascalCase (ej: ClienteService, PrestamoController)
+- Métodos públicos: PascalCase (ej: CalcularInteres, ObtenerCliente)
+- Métodos privados: PascalCase (ej: ValidarDatos)
+- Variables locales: camelCase (ej: totalClientes, precioUnitario)
+- Campos privados: _camelCase con underscore (ej: _clienteRepository, _logger)
+- Constantes: PascalCase (ej: MaxIntentos, TiempoEspera)
+- Interfaces: IPascalCase con prefijo I (ej: IClienteService)
+- Parámetros: camelCase (ej: clienteId, montoPrestamo)
+- Namespaces: Sistecredito.{Dominio}.{Capa} (ej: Sistecredito.Clientes.Api)
 
-## Librerías Obligatorias
-- Logging: SLF4J + Logback
-- Validación: Jakarta Bean Validation
-- HTTP Client: Spring WebClient
-- Testing: JUnit 5 + Mockito
+## Arquitectura Obligatoria
+```
+Sistecredito.Clientes/
+├── Sistecredito.Clientes.Api/           # Controllers, Program.cs
+│   ├── Controllers/
+│   ├── Middleware/
+│   ├── Filters/
+│   └── Program.cs
+├── Sistecredito.Clientes.Application/   # Services, DTOs, Interfaces
+│   ├── Services/
+│   ├── DTOs/
+│   ├── Interfaces/
+│   └── Validators/
+├── Sistecredito.Clientes.Domain/        # Entities, Domain Logic
+│   ├── Entities/
+│   ├── ValueObjects/
+│   └── Exceptions/
+├── Sistecredito.Clientes.Infrastructure/# Repositories, DbContext
+│   ├── Repositories/
+│   ├── Data/
+│   └── Migrations/
+└── Sistecredito.Clientes.Tests/         # Tests
+```
+
+## Paquetes NuGet Obligatorios
+- **Logging**: Microsoft.Extensions.Logging + Serilog
+- **HTTP Client**: Microsoft.Extensions.Http (HttpClientFactory)
+- **Validation**: FluentValidation
+- **Mapping**: AutoMapper
+- **ORM**: Entity Framework Core 8.x
+- **Testing**: xUnit + Moq + FluentAssertions
+- **gRPC**: Grpc.AspNetCore + Grpc.Tools
+- **Azure**: Azure.Identity, Azure.Messaging.ServiceBus, Azure.Security.KeyVault.Secrets
+- **Health Checks**: Microsoft.Extensions.Diagnostics.HealthChecks
 
 ## Prohibido
-- ❌ System.out.println() → Usar logger
-- ❌ Date → Usar LocalDate/LocalDateTime
-- ❌ Exceptions genéricas → Usar custom exceptions
+- ❌ Console.WriteLine() → Usar ILogger<T>
+- ❌ DateTime.Now → Usar DateTime.UtcNow o IClock abstraction
+- ❌ Newtonsoft.Json → Usar System.Text.Json
+- ❌ Dapper directo → Usar Entity Framework Core
+- ❌ Exceptions genéricas → Usar custom domain exceptions
 
-## Estructura de Proyecto
+## Inyección de Dependencias
+SIEMPRE usar DI container de .NET:
+```csharp
+// Program.cs
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddHttpClient<IExternalApiClient, ExternalApiClient>();
 ```
-src/
-├── main/
-│   ├── java/com/sistecredito/{modulo}/
-│   │   ├── controller/
-│   │   ├── service/
-│   │   ├── repository/
-│   │   ├── model/
-│   │   ├── dto/
-│   │   └── exception/
-│   └── resources/
-└── test/
+
+## Logging Estándar
+```csharp
+public class ClienteService : IClienteService
+{
+    private readonly ILogger<ClienteService> _logger;
+    
+    public ClienteService(ILogger<ClienteService> logger)
+    {
+        _logger = logger;
+    }
+    
+    public async Task<Cliente> ObtenerClienteAsync(Guid clienteId)
+    {
+        _logger.LogInformation("Obteniendo cliente {ClienteId}", clienteId);
+        
+        try
+        {
+            var cliente = await _repository.GetByIdAsync(clienteId);
+            return cliente;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error obteniendo cliente {ClienteId}", clienteId);
+            throw;
+        }
+    }
+}
 ```
 
 ## Manejo de Errores
-SIEMPRE usar @RestControllerAdvice para manejo global:
-```java
-@RestControllerAdvice
-public class GlobalExceptionHandler {
-    @ExceptionHandler(RecursoNoEncontradoException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(RecursoNoEncontradoException ex) {
-        // código estándar
+SIEMPRE usar middleware global:
+```csharp
+// GlobalExceptionHandlerMiddleware.cs
+public class GlobalExceptionHandlerMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
+    
+    public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
+        {
+            await _next(context);
+        }
+        catch (NotFoundException ex)
+        {
+            _logger.LogWarning(ex, "Recurso no encontrado");
+            await HandleExceptionAsync(context, ex, StatusCodes.Status404NotFound);
+        }
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning(ex, "Error de validación");
+            await HandleExceptionAsync(context, ex, StatusCodes.Status400BadRequest);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error no controlado");
+            await HandleExceptionAsync(context, ex, StatusCodes.Status500InternalServerError);
+        }
+    }
+    
+    private static async Task HandleExceptionAsync(HttpContext context, Exception exception, int statusCode)
+    {
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = statusCode;
+        
+        var response = new ErrorResponse
+        {
+            StatusCode = statusCode,
+            Message = exception.Message,
+            Timestamp = DateTime.UtcNow
+        };
+        
+        await context.Response.WriteAsJsonAsync(response);
+    }
+}
+```
+
+## Health Checks
+TODO servicio DEBE incluir health checks:
+```csharp
+// Program.cs
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ClienteDbContext>("database")
+    .AddAzureServiceBusTopic(serviceBusConnectionString, "clientes-topic", "servicebus");
+
+app.MapHealthChecks("/health");
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+```
+
+## gRPC Services
+```csharp
+// cliente.proto
+syntax = "proto3";
+
+option csharp_namespace = "Sistecredito.Clientes.Grpc";
+
+service ClienteService {
+  rpc ObtenerCliente (ObtenerClienteRequest) returns (ClienteResponse);
+  rpc CrearCliente (CrearClienteRequest) returns (ClienteResponse);
+}
+
+message ObtenerClienteRequest {
+  string cliente_id = 1;
+}
+
+message ClienteResponse {
+  string id = 1;
+  string nombre = 2;
+  string email = 3;
+}
+```
+
+```csharp
+// ClienteGrpcService.cs
+public class ClienteGrpcService : ClienteService.ClienteServiceBase
+{
+    private readonly IClienteService _clienteService;
+    private readonly ILogger<ClienteGrpcService> _logger;
+    
+    public ClienteGrpcService(IClienteService clienteService, ILogger<ClienteGrpcService> logger)
+    {
+        _clienteService = clienteService;
+        _logger = logger;
+    }
+    
+    public override async Task<ClienteResponse> ObtenerCliente(ObtenerClienteRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation("gRPC ObtenerCliente llamado para {ClienteId}", request.ClienteId);
+        
+        var cliente = await _clienteService.ObtenerClienteAsync(Guid.Parse(request.ClienteId));
+        
+        return new ClienteResponse
+        {
+            Id = cliente.Id.ToString(),
+            Nombre = cliente.Nombre,
+            Email = cliente.Email
+        };
+    }
+}
+```
+
+## Azure Service Bus
+```csharp
+// Program.cs
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddServiceBusClient(configuration["Azure:ServiceBus:ConnectionString"]);
+});
+
+// ClienteCreadoPublisher.cs
+public class ClienteCreadoPublisher
+{
+    private readonly ServiceBusClient _serviceBusClient;
+    private readonly ILogger<ClienteCreadoPublisher> _logger;
+    
+    public async Task PublishAsync(ClienteCreadoEvent evento)
+    {
+        var sender = _serviceBusClient.CreateSender("clientes-topic");
+        
+        var message = new ServiceBusMessage(JsonSerializer.Serialize(evento))
+        {
+            ContentType = "application/json",
+            MessageId = Guid.NewGuid().ToString()
+        };
+        
+        await sender.SendMessageAsync(message);
+        _logger.LogInformation("Evento ClienteCreado publicado {ClienteId}", evento.ClienteId);
     }
 }
 ```
 ```
 
-### Ejemplo 2: Approved Libraries (approved-libraries.json)
+### Ejemplo 2: Approved NuGet Packages (approved-nuget-packages.json)
 
 ```json
 {
-  "java": {
+  "dotnet": {
     "logging": [
-      { "name": "SLF4J", "version": "2.x", "status": "approved" },
-      { "name": "Logback", "version": "1.4.x", "status": "approved" },
-      { "name": "Log4j 1.x", "status": "prohibited", "reason": "vulnerabilities", "alternative": "Logback" }
+      { "name": "Microsoft.Extensions.Logging", "version": "8.x", "status": "approved" },
+      { "name": "Serilog.AspNetCore", "version": "8.x", "status": "approved" },
+      { "name": "Serilog.Sinks.Console", "version": "5.x", "status": "approved" },
+      { "name": "Serilog.Sinks.AzureApplicationInsights", "version": "4.x", "status": "approved" },
+      { "name": "NLog", "status": "prohibited", "reason": "usar Serilog", "alternative": "Serilog" }
     ],
     "testing": [
-      { "name": "JUnit 5", "version": "5.9+", "status": "approved" },
-      { "name": "Mockito", "version": "5.x", "status": "approved" },
-      { "name": "TestNG", "status": "deprecated", "alternative": "JUnit 5" }
+      { "name": "xUnit", "version": "2.6+", "status": "approved" },
+      { "name": "Moq", "version": "4.20+", "status": "approved" },
+      { "name": "FluentAssertions", "version": "6.12+", "status": "approved" },
+      { "name": "NUnit", "status": "deprecated", "alternative": "xUnit" },
+      { "name": "MSTest", "status": "deprecated", "alternative": "xUnit" }
     ],
-    "web": [
-      { "name": "Spring Boot", "version": "3.2+", "status": "approved" },
-      { "name": "Spring WebFlux", "version": "6.x", "status": "approved" }
+    "orm": [
+      { "name": "Microsoft.EntityFrameworkCore", "version": "8.x", "status": "approved" },
+      { "name": "Microsoft.EntityFrameworkCore.SqlServer", "version": "8.x", "status": "approved" },
+      { "name": "Npgsql.EntityFrameworkCore.PostgreSQL", "version": "8.x", "status": "approved" },
+      { "name": "Dapper", "status": "conditional", "note": "solo para queries de lectura complejas" }
+    ],
+    "grpc": [
+      { "name": "Grpc.AspNetCore", "version": "2.60+", "status": "approved" },
+      { "name": "Grpc.Tools", "version": "2.60+", "status": "approved" },
+      { "name": "Google.Protobuf", "version": "3.25+", "status": "approved" }
+    ],
+    "azure": [
+      { "name": "Azure.Identity", "version": "1.11+", "status": "approved" },
+      { "name": "Azure.Messaging.ServiceBus", "version": "7.17+", "status": "approved" },
+      { "name": "Azure.Security.KeyVault.Secrets", "version": "4.6+", "status": "approved" },
+      { "name": "Microsoft.ApplicationInsights.AspNetCore", "version": "2.22+", "status": "approved" }
+    ],
+    "json": [
+      { "name": "System.Text.Json", "version": "8.x", "status": "approved" },
+      { "name": "Newtonsoft.Json", "status": "deprecated", "alternative": "System.Text.Json" }
+    ],
+    "validation": [
+      { "name": "FluentValidation", "version": "11.9+", "status": "approved" },
+      { "name": "FluentValidation.AspNetCore", "version": "11.3+", "status": "approved" }
+    ],
+    "mapping": [
+      { "name": "AutoMapper", "version": "13.x", "status": "approved" },
+      { "name": "AutoMapper.Extensions.Microsoft.DependencyInjection", "version": "13.x", "status": "approved" }
     ]
   },
-  "python": {
-    "web": [
-      { "name": "FastAPI", "version": "0.100+", "status": "approved" },
-      { "name": "Flask", "version": "3.x", "status": "approved" }
+  "angular": {
+    "core": [
+      { "name": "@angular/core", "version": "17.x", "status": "approved" },
+      { "name": "@angular/common", "version": "17.x", "status": "approved" },
+      { "name": "@angular/forms", "version": "17.x", "status": "approved" }
+    ],
+    "http": [
+      { "name": "@angular/common/http", "version": "17.x", "status": "approved" }
+    ],
+    "rxjs": [
+      { "name": "rxjs", "version": "7.8+", "status": "approved" }
+    ],
+    "ui": [
+      { "name": "@angular/material", "version": "17.x", "status": "approved" },
+      { "name": "@angular/cdk", "version": "17.x", "status": "approved" }
+    ],
+    "testing": [
+      { "name": "jasmine-core", "version": "5.x", "status": "approved" },
+      { "name": "karma", "version": "6.4+", "status": "approved" }
+    ]
+  },
+  "nestjs": {
+    "core": [
+      { "name": "@nestjs/core", "version": "10.x", "status": "approved" },
+      { "name": "@nestjs/common", "version": "10.x", "status": "approved" },
+      { "name": "@nestjs/platform-express", "version": "10.x", "status": "approved" }
+    ],
+    "microservices": [
+      { "name": "@nestjs/microservices", "version": "10.x", "status": "approved" },
+      { "name": "@grpc/grpc-js", "version": "1.10+", "status": "approved" }
     ]
   }
 }
 ```
 
-### Ejemplo 3: Security Policies (owasp-compliance.md)
+### Ejemplo 3: gRPC Standards (grpc-standards.md)
 
 ```markdown
-# OWASP Compliance - Sistecredito
+# gRPC Standards - Sistecredito
 
-## A01:2021 - Broken Access Control
-- ✅ Validar permisos en TODAS las operaciones
-- ✅ Usar @PreAuthorize en endpoints
-- ❌ NUNCA confiar en input del cliente para permisos
+## Uso de gRPC
+- Comunicación **sincrónica** entre microservicios backend (.NET ↔ .NET)
+- BFF NestJS → Backend .NET usa gRPC
+- Frontend (Angular/Mobile) → BFF usa REST/HTTP
 
-## A02:2021 - Cryptographic Failures
-- ✅ Encriptar datos sensibles en BD (AES-256)
-- ✅ HTTPS obligatorio en producción
-- ✅ Passwords con BCrypt (12 rounds mínimo)
-- ❌ NO usar MD5/SHA1 para passwords
+## Estructura de .proto files
+```
+protos/
+├── clientes/
+│   └── v1/
+│       └── cliente.proto
+├── prestamos/
+│   └── v1/
+│       └── prestamo.proto
+└── common/
+    └── v1/
+        └── common.proto
+```
 
-## A03:2021 - Injection
-- ✅ Usar PreparedStatements SIEMPRE
-- ✅ Validar/sanitizar todos los inputs
-- ❌ NUNCA concatenar strings en SQL
+## Naming Conventions
+- Services: PascalCase (ej: `ClienteService`)
+- RPCs: PascalCase (ej: `ObtenerCliente`, `CrearCliente`)
+- Messages: PascalCase (ej: `ClienteResponse`, `CrearClienteRequest`)
+- Fields: snake_case (ej: `cliente_id`, `nombre_completo`)
 
-## Secretos
-- ❌ PROHIBIDO hardcodear passwords/keys
-- ✅ Usar Azure Key Vault en producción
-- ✅ Usar variables de entorno localmente
+## Versionado
+- Siempre incluir versión en namespace: `Sistecredito.Clientes.V1`
+- Usar versionado semántico en proto files
+- NO hacer breaking changes en versiones existentes
+
+## Seguridad
+- TLS obligatorio en producción
+- Autenticación con JWT en metadata
+- Interceptors para logging y tracing
+
+## Health Checks
+TODO servicio gRPC debe implementar:
+```protobuf
+service Health {
+  rpc Check (HealthCheckRequest) returns (HealthCheckResponse);
+}
+```
+
+## Error Handling
+Usar status codes de gRPC apropiados:
+- OK: Éxito
+- NOT_FOUND: Recurso no encontrado
+- INVALID_ARGUMENT: Validación fallida
+- INTERNAL: Error del servidor
+```
 ```
 
 ---
 
-### Seguridad y Gobernanza
+## Consideraciones Técnicas
 - **Control de acceso**: Solo empleados de Sistecredito con GitHub organizacional
 - **Auditoría**: Logs de cambios en agentes
 - **Versionado**: Semantic versioning (major.minor.patch)
@@ -1314,23 +2072,29 @@ public class GlobalExceptionHandler {
 ### Decisiones Requeridas URGENTES
 
 #### 1. Infraestructura
-- [ ] ¿GitHub Enterprise de Sistecredito o GitHub.com privado?
-- [ ] ¿Naming del repositorio: `sistecredito/copilot-agents` o diferente?
+- [ ] ¿GitHub de Sistecredito o GitHub.com privado? (probablemente ya tienen org GitHub)
+- [ ] ¿Azure DevOps Repos o GitHub? (para alojar sistecredito/copilot-agents)
+- [ ] ¿Naming del repositorio: `sistecredito/copilot-agents` o `sistecredito/github-copilot-agents`?
 
-#### 2. Knowledge Base
-- [ ] ¿Ya existe documentación de estándares o hay que crearla desde cero?
-- [ ] ¿Quién es responsable de mantener el knowledge-base actualizado?
-- [ ] ¿Cada cuánto revisar/actualizar prácticas tecnológicas?
+#### 2. Knowledge Base y SisteDocs
+- [ ] ✅ **SisteDocs existe** - ventaja crítica
+- [ ] ¿Quién mantiene SisteDocs actualmente? (coordinar con ellos)
+- [ ] ¿SisteDocs tiene API o requiere web scraping?
+- [ ] ¿Podemos agregar webhook a SisteDocs para notificar cambios?
+- [ ] ¿Quién aprueba cambios en knowledge base cuando SisteDocs no tiene info?
+- [ ] ¿Cada cuánto sincronizar con SisteDocs? (Recomendado: diario + manual on-demand)
+- [ ] ¿Proceso para agregar docs faltantes a SisteDocs o solo a knowledge base local?
 
 #### 3. Agentes Piloto
-**Propuesta de 5 agentes críticos (orden de prioridad):**
-1. ⭐⭐ **security-scanner** (máximo impacto en calidad)
-2. ⭐⭐ **standards-enforcer** (consistencia de código)
-3. ⭐ **code-generator** (productividad)
-4. ⭐ **unit-test-generator** (cobertura de tests)
-5. ⭐ **architecture-validator** (arquitectura correcta)
+**Propuesta de 5 agentes críticos (BASADOS EN DOCS EXISTENTES):**
+1. ⭐⭐⭐ **dotnet-clean-architecture-generator** (plantilla ya existe en SisteDocs)
+2. ⭐⭐⭐ **security-scanner** (guías seguridad ya existen)
+3. ⭐⭐⭐ **dotnet-test-generator** (lineamientos testing ya existen)
+4. ⭐⭐ **angular-component-generator** (sistema diseño ya existe)
+5. ⭐⭐ **nestjs-bff-generator** (plantilla ya existe)
 
 **¿Están de acuerdo o priorizarían otros?**
+**¿Hay algún agente URGENTE que no está en la lista?**
 
 #### 4. Governance
 - [ ] ¿Quiénes serán miembros del Comité Ejecutivo?
@@ -1359,9 +2123,39 @@ public class GlobalExceptionHandler {
 
 #### 8. Timeline
 - [ ] ¿Timeline esperado? 
-  - **Agresivo**: 6 semanas (riesgo alto)
-  - **Balanceado** ✅: 8-10 semanas (recomendado)
-  - **Conservador**: 12+ semanas (riesgo bajo)
+  - **Agresivo**: 6-8 semanas (riesgo medio - SisteDocs acelera)
+  - **Balanceado** ✅: 10-12 semanas (recomendado - incluye completar docs faltantes)
+  - **Conservador**: 14+ semanas (riesgo bajo - documentación exhaustiva)
+
+#### 9. Coordinación con SisteDocs
+- [ ] ¿Contacto del equipo que mantiene SisteDocs?
+- [ ] ¿Proceso para solicitar acceso a sección DevOps? (actualmente error 500)
+- [ ] ¿Podemos colaborar en completar documentación faltante directamente en SisteDocs?
+
+---
+
+## Ventaja Competitiva: SisteDocs Existente
+
+### Lo que ACELERA la implementación:
+✅ **Plantillas de desarrollo ya definidas** - No inventar arquitecturas
+✅ **Guías de seguridad existentes** - No crear desde cero
+✅ **Testing standards documentados** - Aplicar directamente
+✅ **Sistema de diseño Angular** - Reutilizar en agentes
+✅ **Integraciones documentadas** - SSE, Webhooks ya tienen lineamientos
+✅ **Azure B2C establecido** - Autenticación ya resuelta
+
+### Lo que REDUCE riesgos:
+✅ Adopción más fácil (devs ya conocen SisteDocs)
+✅ Menor resistencia al cambio (agentes refuerzan lo conocido)
+✅ Validación más rápida (comparar con docs existentes)
+
+### Lo que FALTA completar:
+⚠️ Estándares de código específicos (~30% faltante)
+⚠️ Librerías aprobadas/prohibidas (~40% faltante)
+⚠️ Documentación móvil nativa (~80% faltante)
+⚠️ DevOps detallado (pendiente acceso)
+
+**ESTIMACIÓN**: Con SisteDocs, el knowledge base está **60-70% completo**. Esto reduce el timeline de 12-16 semanas a **10-12 semanas**.
 
 ### Acción Inmediata
 **Opción A**: Comenzar con Fase 1 (investigación técnica de MCP)  
